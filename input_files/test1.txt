@@ -1,0 +1,27 @@
+tippingRulebase
+
+Rule 1 If the driving is good and the journey_time is short then the tip will be big
+Rule 2 If the driving is good or the journey_time is short then the tip will be moderate
+Rule 3 If the driving is average or the journey_time is medium then the tip will be moderate
+Rule 4 If the driving is bad and the journey_time is long then the tip will be small
+
+driving
+
+bad 0 30 0 20
+average 50 50 20 20
+good 80 100 20 0
+
+journey_time
+
+short 0 0 0 10
+medium 10 10 5 5
+long 20 20 10 0
+
+tip
+
+small 50 50 50 50
+moderate 100 100 50 50
+big 150 150 50 50
+
+journey_time = 9
+driving = 65
