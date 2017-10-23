@@ -29,7 +29,7 @@ class InputParser:
 
                 if new_entry_mode:  # create new entry in dict
                     if '=' in line:  # if the name line has an equals sign in it, it's an input value
-                        self.input_values.append(line)
+                        self.input_values.append((line.split()[0], line.split()[-1]))
 
                     elif line in self.file_data_dict:  # check for re-used entry names
                         exit(1)
