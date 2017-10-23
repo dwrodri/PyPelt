@@ -1,6 +1,7 @@
 import math
 from collections import OrderedDict
 
+
 class FuzzyVariable:
     def __init__(self, name: str, set_data: str):
         self.sets = []
@@ -61,7 +62,7 @@ class FuzzyKB:
         FuzzyKB contains all the rules and sets used to build the consequence system
         """
         has_rulebase = False  # first flag for rulebase
-        self.rule_data = ('', [])  # tuple for rule data
+        self.rule_data = ['', []]  # tuple for rule data
         self.fuzzy_vars = []
 
         for key in parsed_dict:  # strip rules away and instantiate FuzzyVariable classes
@@ -82,9 +83,12 @@ class FuzzyKB:
 
 class InferenceEngine:
 
-    def __init__(self, data: tuple):
+    def __init__(self, data: list):
         self.list = data[0]
         self.rule_strings = data[1]
+
+    def make_inference(self, inputs: list) -> list:
+        pass
 
 
 

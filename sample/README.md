@@ -1,6 +1,6 @@
-# CS4047_Assessment
+# PyPelt
 
-This is a basic fuzzy rule framework that maps fuzzy sets to rules defined in "if-then" format in a text file. I made this for a school project.
+This is a fuzzy logic system built around the [Tsukamoto model](http://researchhubs.com/post/engineering/fuzzy-system/tsukamoto-fuzzy-model.html) for fuzzy-rule-based systems.
 
 ## Structure
 
