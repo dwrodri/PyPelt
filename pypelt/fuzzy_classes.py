@@ -100,7 +100,7 @@ class FuzzyKB:
         :type var_name: str
         :param var_name: fuzzy variable name
         :param crisp_val: crisp value to be assessed in each set of the variable
-        :return: dicitonary entry with membership to each set in the variable
+        :return: dicitionary entry with membership to each set in the variable
         """
 
         variable_states = {}
