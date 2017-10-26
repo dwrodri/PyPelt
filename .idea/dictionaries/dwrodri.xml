@@ -2,9 +2,13 @@
   <dictionary name="dwrodri">
     <words>
       <w>Rulebase</w>
+      <w>antecendent</w>
+      <w>fuzzified</w>
       <w>fuzzify</w>
       <w>knowledgebase</w>
       <w>rulebase</w>
+      <w>subgraph</w>
+      <w>subgraphs</w>
     </words>
   </dictionary>
 </component>

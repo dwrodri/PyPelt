@@ -1,5 +1,6 @@
-import math
+import matplotlib.pyplot as plt
 from collections import OrderedDict
+
 
 class FuzzySet:
     def __init__(self, name: str, a: int, b: int, alpha: int, beta: int):
@@ -9,6 +10,9 @@ class FuzzySet:
         self.beta = beta
         self.name = name
 
+    def dump_points(self) -> list:
+        return [self.a-self.alpha, self.a, self.b, self.b+self.beta]
+
     def get_membership(self, value: float) -> float:
         """
         calculates membership of a value to a function
@@ -17,7 +21,7 @@ class FuzzySet:
         """
         desired = -1.0
         if value < self.a:
-            if value < (self.a-self.alpha):  # return 0 if outside rising crest
+            if value < (self.a - self.alpha):  # return 0 if outside rising crest
                 desired = 0.0
             else:
                 desired = (value - self.a + self.alpha) / self.alpha
@@ -40,22 +44,22 @@ class FuzzySet:
 
 class FuzzyVariable:
     def __init__(self, name: str, set_data: str):
-        self.sets = []
+        self.sets = {}
         self.name = name
         for line in set_data:  # create fuzzy sets from text data
-            self.sets.append(FuzzySet(line.split()[0], int(line.split()[1]),
-                                      int(line.split()[2]), int(line.split()[3]),
-                                      int(line.split()[4])))
+            self.sets.setdefault(line.split()[0], FuzzySet(line.split()[0], int(line.split()[1]),
+                                                           int(line.split()[2]), int(line.split()[3]),
+                                                           int(line.split()[4])))
 
-    def fuzzify(self, input_value: float)->dict:
+    def fuzzify(self, input_value: float) -> dict:
         """
         gets the degrees of memberships of every fuzzy set in the domain of the variable
         :param input_value:
         :return: list of membership values
         """
         memberships = {}
-        for fuzzy_set in self.sets:
-            memberships.setdefault(fuzzy_set.name, fuzzy_set.get_membership(input_value))
+        for key in self.sets:
+            memberships.setdefault(key, self.sets[key].get_membership(input_value))
 
         return memberships
 
@@ -71,21 +75,15 @@ class FuzzyVariable:
 
 
 class FuzzyKB:
-    def __init__(self, parsed_dict: OrderedDict) -> object:
+    def __init__(self, parsed_dict: OrderedDict):
         """
-        FuzzyKB contains all the rules and sets used to build the consequence system
+        FuzzyKB contains all the variables and sets used to build the consequence system
         """
-        has_rulebase = False  # first flag for rulebase
-        self.rule_data = ['', []]  # tuple for rule data
-        self.fuzzy_vars = []
+
+        self.fuzzy_vars = {}
 
         for key in parsed_dict:  # strip rules away and instantiate FuzzyVariable classes
-            if not has_rulebase:
-                self.rule_data[0] = key
-                self.rule_data[1].extend(parsed_dict[key])
-                has_rulebase = True
-            else:
-                self.fuzzy_vars.append(FuzzyVariable(key, parsed_dict[key]))
+            self.fuzzy_vars.setdefault(key, FuzzyVariable(key, parsed_dict[key]))
 
     def __str__(self) -> str:
         desired = ''
@@ -94,25 +92,20 @@ class FuzzyKB:
 
         return desired
 
-    def parse_query(self, var_name: str, crisp_val: float) -> dict:
+    def get_fuzzy_vals(self, var_name: str, crisp_val: float) -> dict:
         """
         recieves query from fuzzifier and returns data pertaining to variable
         :type var_name: str
         :param var_name: fuzzy variable name
         :param crisp_val: crisp value to be assessed in each set of the variable
-        :return: dicitionary entry with membership to each set in the variable
+        :return: dictionary entry with membership to each set in the variable
         """
 
         variable_states = {}
         # dict structure = {variable_name : {set_name : membership , set_name : membership...}, variable_name:...}
 
-        for variable in self.fuzzy_vars:  # get degrees of membership for antecedent vars based on input
-            if variable.name == var_name:
-                variable_states.setdefault(var_name, variable.fuzzify(crisp_val))
+        for key in self.fuzzy_vars:  # get degrees of membership for antecedent vars based on input
+            if key == var_name:
+                variable_states.setdefault(var_name, self.fuzzy_vars[key].fuzzify(crisp_val))
 
         return variable_states
-
-
-
-
-
