@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 
 class InputParser:
-    file_data_dict = OrderedDict()
+    fuzzy_vars_dict = OrderedDict()
     input_values = {}
     rule_stacks = []
 
@@ -15,7 +15,7 @@ class InputParser:
         new_entry_mode = True  # Toggle between create mode and define mode
         current_entry_title = ''  # the title of the element
 
-        # NOTE: file_data_dict = {{element_name : [defining_line1, defining_line2...]}, {element2_name ... }} NOTE:
+        # NOTE: fuzzy_vars_dict = {{element_name : [defining_line1, defining_line2...]}, {element2_name ... }} NOTE:
 
         with open(input_file) as file_stream:
             for line in file_stream:
@@ -30,20 +30,20 @@ class InputParser:
                     if '=' in line:  # if the name line has an equals sign in it, it's an input value
                         self.input_values.setdefault(line.split()[0], line.split()[-1])
 
-                    elif line in self.file_data_dict:  # check for re-used entry names
+                    elif line in self.fuzzy_vars_dict:  # check for re-used entry names
                         exit(1)
 
                     else:  # add new entry to dict
-                        self.file_data_dict.setdefault(line, [])
+                        self.fuzzy_vars_dict.setdefault(line, [])
                         current_entry_title = line
 
                 else:  # if not in create mode, add line to current entry
-                    self.file_data_dict[current_entry_title].append(line)
+                    self.fuzzy_vars_dict[current_entry_title].append(line)
 
         # NOTE: the first element will be the rule base, which is then popped, and parsed into an array of reverse
         # polish command stacks
 
-        for rule in list(self.file_data_dict.items())[0][1]:
+        for rule in list(self.fuzzy_vars_dict.items())[0][1]:
             antecedent, consequent = rule[len('Rule # If the '):].split(
                 'then the ')  # split the string and cut off the first two words
             parsed_stack = []  # stack that has been arranged in reverse polish notation
@@ -72,14 +72,14 @@ class InputParser:
             parsed_stack.append('then')
             self.rule_stacks.append(parsed_stack)  # add the rule stack to the list
 
-        del self.file_data_dict[list(self.file_data_dict.items())[0][0]]  # remove rules from dict
+        del self.fuzzy_vars_dict[list(self.fuzzy_vars_dict.items())[0][0]]  # remove rules from dict
 
     def dump_dict(self) -> None:
 
         """
         Prints the dictionary collected from reading the input file.
         """
-        for key in self.file_data_dict:
+        for key in self.fuzzy_vars_dict:
             print('Entry Name: ' + key)
-            for value in self.file_data_dict[key]:
+            for value in self.fuzzy_vars_dict[key]:
                 print('\t' + value)

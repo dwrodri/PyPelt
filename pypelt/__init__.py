@@ -4,7 +4,7 @@ from pypelt.fuzzy_classes import *
 import pypelt.fuzzification
 
 if __name__ == '__main__':
-    parser = InputParser(sys.argv[1])
-    kb = FuzzyKB(parser.file_data_dict)
+    parser = InputParser(sys.argv[1])  # parse file
+    kb = FuzzyKB(parser.fuzzy_vars_dict)  # generate knowledgebase with fuzzy sets and variables
     pypelt.fuzzification.visualize_system(kb, parser.input_values, parser.rule_stacks)
 

@@ -3,12 +3,14 @@
     <words>
       <w>Rulebase</w>
       <w>antecendent</w>
+      <w>fuzzification</w>
       <w>fuzzified</w>
       <w>fuzzify</w>
       <w>knowledgebase</w>
       <w>rulebase</w>
       <w>subgraph</w>
       <w>subgraphs</w>
+      <w>vals</w>
     </words>
   </dictionary>
 </component>
