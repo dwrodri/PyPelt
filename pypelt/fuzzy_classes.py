@@ -35,6 +35,42 @@ class FuzzySet:
 
         return desired
 
+    def get_consequent(self, weight: float) -> float:
+        """
+        takes weight and performs inference calculation on set
+        :param weight: the weight of the rule calculated when assessing the antecedents
+        :return: the z fuzzy value in the domain of the set
+        """
+        if weight == 0:
+            return 0.0
+        if self.alpha > 0:  # if there is a left slant
+            left_influence = (self.a-self.alpha) + (self.alpha) * weight
+        else:
+            left_influence = self.a
+        if self.beta > 0:  # if there is a right slant
+            right_influence = self.b + self.beta - (self.beta * weight)
+        else:
+            right_influence = self.b
+        return (left_influence+right_influence)/2
+
+    def get_influences(self, weight: float) -> tuple:
+        """
+        return influences on consequent fuzzy for debugging purposes
+        :param weight: the weight of the rule calculated when assessing the antecedents
+        :return: tuple of the left and right
+        """
+        if weight == 0:
+            return 0.0, 0.0
+        if self.alpha > 0:  # if there is a left slant
+            left_influence = (self.a-self.alpha) + (self.alpha) * weight
+        else:
+            left_influence = self.a
+        if self.beta > 0:  # if there is a right slant
+            right_influence = self.b + self.beta - (self.beta * weight)
+        else:
+            right_influence = self.b
+        return left_influence, right_influence
+
     def __str__(self):
         return '{}: {} {} {} {}'.format(self.name, self.a, self.b, self.alpha, self.beta)
 
